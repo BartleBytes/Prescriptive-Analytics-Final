@@ -1,0 +1,18 @@
+"""Project assumptions from Excel preprocessing."""
+
+CONDO_REHAB_AVG = 40
+
+CONDO_REHAB_QUARTILES = {
+    "Q1": 45,
+    "Q2": 35,
+    "Q3": 25,
+    "Q4": 15,
+}
+
+PURCHASE_DISCOUNT = 0.114
+AVG_SOLD_PRICE_SQFT = 360.50
+RESALE_PRICE_90TH = 445.0
+
+BUYER_CLOSING_COST = 0.02
+SELLER_CLOSING_COST = 0.06
+TOTAL_CLOSING_COST = 0.08
