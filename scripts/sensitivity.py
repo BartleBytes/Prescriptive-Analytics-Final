@@ -10,7 +10,8 @@ import sys
 sys.path.append(str(Path(__file__).resolve().parents[1] / "src"))
 
 from portfolio_opt.data import DataConfig, load_raw_csv, prepare_portfolio_data 
-from portfolio_opt.optimization import (  
+from portfolio_opt.optimization import (
+    PortfolioConstraints,
     solve_dinkelbach_roi_maximization,
 )
 

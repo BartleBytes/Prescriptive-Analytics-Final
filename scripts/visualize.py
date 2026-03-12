@@ -54,6 +54,32 @@ def _fmt_currency_str(value: float) -> str:
 def _fmt_percent_str(value: float) -> str:
     return f"{value:.1%}"
 
+def _fmt_currency_str2(value: float) -> str:
+    return f"${value:,.0f}"
+
+def render_table(df: pd.DataFrame, title: str, out_dir: Path, out_name: str) -> None:
+    fig, ax = plt.subplots(figsize=(12, 3.4))
+    ax.axis("off")
+    fig.suptitle(title, y=0.995, fontsize=12, fontweight="bold")
+    table = ax.table(
+        cellText=df.values,
+        colLabels=df.columns,
+        loc="center",
+        cellLoc="center",
+        bbox=[0, 0, 1, 0.88],
+    )
+    table.auto_set_font_size(False)
+    table.set_fontsize(9)
+    table.scale(1, 1.25)
+    for (row, col), cell in table.get_celld().items():
+        if row == 0:
+            cell.set_text_props(weight="bold", color="white")
+            cell.set_facecolor("#1F4E79")
+        else:
+            cell.set_facecolor("#F7F9FB" if row % 2 == 0 else "white")
+    _save(fig, out_dir, out_name)
+    plt.close(fig)
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Generate model comparison visualizations.")
@@ -373,6 +399,61 @@ def main() -> None:
         ax.set_title("Rehab Cost Sensitivity Table", pad=10)
         _save(fig, out_dir, "sensitivity_table.png")
         plt.close(fig)
+
+    # Plot 9: Selected portfolios as tables
+    def _load_and_format_selected(path: Path) -> pd.DataFrame:
+        df = pd.read_csv(path)
+        cols = [
+            "MLS",
+            "Condo/SFH",
+            "Resale Price",
+            "Purchase Price",
+            "Rehab Costs",
+            "Closing Costs",
+            "total_investment",
+            "profit",
+        ]
+        available = [c for c in cols if c in df.columns]
+        df = df[available].copy()
+
+        rename_map = {
+            "Condo/SFH": "SFH",
+            "Resale Price": "Resale",
+            "Purchase Price": "Purchase",
+            "Rehab Costs": "Rehab",
+            "Closing Costs": "Closing",
+            "total_investment": "Invested",
+            "profit": "Profit",
+        }
+        df.rename(columns=rename_map, inplace=True)
+
+        for col in ["Resale", "Purchase", "Rehab", "Closing", "Invested", "Profit"]:
+            if col in df.columns:
+                df[col] = df[col].map(_fmt_currency_str2)
+
+        return df
+
+    selected_dir = Path("data/processed")
+    table_specs = [
+        ("selected_arv.csv", "ARV Profit Maximization Portfolio", "selected_arv_table.png"),
+        (
+            "selected_dinkelbach.csv",
+            "Dinkelbach ROI Maximization Portfolio",
+            "selected_dinkelbach_table.png",
+        ),
+        (
+            "selected_stochastic.csv",
+            "Stochastic Expected Profit Portfolio",
+            "selected_stochastic_table.png",
+        ),
+    ]
+
+    for filename, title, out_name in table_specs:
+        path = selected_dir / filename
+        if path.exists():
+            df_table = _load_and_format_selected(path)
+            if not df_table.empty:
+                render_table(df_table, title, out_dir, out_name)
     print(f"Wrote figures to {out_dir}")
 
 

@@ -7,6 +7,17 @@ import pandas as pd
 import pulp
 
 
+def _get_solver() -> pulp.LpSolver:
+    try:
+        solver = pulp.GUROBI_CMD(msg=False)
+    except Exception as exc:  # pragma: no cover - depends on local install
+        raise RuntimeError(
+            "Gurobi solver not available. Install and license Gurobi "
+            "or set it up in your environment."
+        ) from exc
+    return solver
+
+
 @dataclass(frozen=True)
 class PortfolioConstraints:
     budget: float = 5_000_000
@@ -94,7 +105,7 @@ def _build_problem(
 
 
 def _solve_problem(problem: pulp.LpProblem) -> str:
-    solver = pulp.PULP_CBC_CMD(msg=False)
+    solver = _get_solver()
     problem.solve(solver)
     return pulp.LpStatus[problem.status]
 
