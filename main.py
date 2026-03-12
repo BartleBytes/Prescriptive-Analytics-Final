@@ -6,14 +6,14 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent / "src"))
 
-from portfolio_opt.data import (  # noqa: E402
+from portfolio_opt.data import (  
     DataConfig,
     add_stochastic_columns,
     load_raw_csv,
     prepare_portfolio_data,
 )
-from portfolio_opt.scenarios import SCENARIOS  # noqa: E402
-from portfolio_opt.optimization import (  # noqa: E402
+from portfolio_opt.scenarios import SCENARIOS  
+from portfolio_opt.optimization import (  
     PortfolioConstraints,
     solve_arv_profit_maximization,
     solve_dinkelbach_roi_maximization,

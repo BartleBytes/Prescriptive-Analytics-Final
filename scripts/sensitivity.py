@@ -9,9 +9,8 @@ import sys
 
 sys.path.append(str(Path(__file__).resolve().parents[1] / "src"))
 
-from portfolio_opt.data import DataConfig, load_raw_csv, prepare_portfolio_data  # noqa: E402
-from portfolio_opt.optimization import (  # noqa: E402
-    PortfolioConstraints,
+from portfolio_opt.data import DataConfig, load_raw_csv, prepare_portfolio_data 
+from portfolio_opt.optimization import (  
     solve_dinkelbach_roi_maximization,
 )
 
