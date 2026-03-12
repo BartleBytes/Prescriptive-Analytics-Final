@@ -1,6 +1,6 @@
 # Prescriptive Portfolio Optimization
 
-Python + Jupyter project for the BANA Properties Inc. residential portfolio optimization final.
+Python project for the BANA Properties Inc. residential portfolio optimization final.
 
 ## Quick start
 
@@ -10,21 +10,22 @@ Python + Jupyter project for the BANA Properties Inc. residential portfolio opti
 uv sync
 ```
 
-2. Launch JupyterLab:
+2. Run the main pipeline:
 
 ```bash
-uv run jupyter lab
+uv run python main.py --stochastic --pessimistic-profit-floor 0
 ```
 
-3. Open `notebooks/ARV_2.ipynb` or start with `notebooks/00_project_setup.ipynb`.
+See `RUN.md` for the full run guide.
 
 ## Project layout
 
 - `data/raw/` raw inputs (copied from source)
 - `data/processed/` derived datasets
-- `notebooks/` analysis notebooks
 - `reports/` generated summaries and tables
+- `reports/figures/` generated charts and tables
 - `src/portfolio_opt/` reusable Python modules
+- `scripts/` runnable analysis scripts
 
 ## Running the model from CLI
 
@@ -65,4 +66,3 @@ uv run python scripts/sensitivity.py \
 ```bash
 uv run python scripts/visualize.py
 ```
-
